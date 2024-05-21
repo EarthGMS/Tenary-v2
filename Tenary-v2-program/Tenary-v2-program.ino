@@ -5,11 +5,9 @@ Version : v2.0
 Finish date : TBD
 */
 
-// Modes
-
-// Data output
-
 // Indicators
+int ErrorPin = 3;
+int NegativePin = 4;
 
 void setup()
 {
