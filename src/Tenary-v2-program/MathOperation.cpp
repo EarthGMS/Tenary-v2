@@ -12,8 +12,9 @@ typedef enum mode
 
 mode mathMode;
 
-uint8_t MathCalculate(uint8_t set1, uint8_t set2, String ChooseMode)
+void MathCalculate(uint8_t set1, uint8_t set2, String ChooseMode, uint8_t &Result, double &DecimalResult)
 {
+    uint8_t SubResult = 0;
     if (ChooseMode == "Add")
     {
         mathMode = Add;
@@ -31,33 +32,39 @@ uint8_t MathCalculate(uint8_t set1, uint8_t set2, String ChooseMode)
         mathMode = Div;
     }
 
-    mathMode = Mul;
-
     switch (mathMode)
     {
     case Add:
-        return set1 + set2;
-        break;
-    case Sub:
-        uint8_t SubResult = set1 - set2;
-        if (SubResult > 7){
-          digitalWrite(2, HIGH); //Open negative LED
-          return (abs)((int8_t)(SubResult));
-        }
+        Result = set1 + set2;
+        DecimalResult = 0;
         break;
     case Mul:
-        return set1 * set2;
+        Result = set1 * set2;
+        DecimalResult = 0;
         break;
     case Div:
-        if (set2 == 0)
-        {
-            return 0;
+        if (set2 == 0){
+          Result = 0;
+          digitalWrite(3, HIGH);
+          break;
         }
-        return set1 / set2;
+        Result = (set1 / set2) + 0.5;
+        DecimalResult = (double)set1 / (double)set2;
         break;
-
+    case Sub:
+        SubResult = set1 - set2;
+        if (SubResult > 7){
+          digitalWrite(2, HIGH); //Open negative LED
+          SubResult = (abs)((int8_t)(SubResult));
+        }
+        Result = SubResult;
+        DecimalResult = 0;
+        break;
     default:
-        return 0;
+        Result = 0;
+        DecimalResult = 0;
         break;
     }
 }
+
+

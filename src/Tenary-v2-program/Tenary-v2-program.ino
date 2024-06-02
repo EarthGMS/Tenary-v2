@@ -1,8 +1,8 @@
 #include "Arduino.h"
 #include "BinaryToBaseTen.h"
 #include "MathOperation.h"
-// #include "OutputBinary.h"
-// #include "ClearCode.h"
+#include "OutputBinary.h"
+#include "ClearCode.h"
 /*Tenary 2.0
 Made by : Pongsapat Boonpong
 Purpose : To extend functions and applications from the Tenary 1.0
@@ -16,6 +16,7 @@ uint8_t Set2Val = 0;
 
 // Result value
 uint8_t Result;
+double DecimalResult;
 
 // Text
 String modeText;
@@ -54,6 +55,7 @@ void loop()
       Set1Val = 0;
       Set2Val = 0;
       Result = 0;
+      DecimalResult = 0;
     // Turn off output pins
     // ResetPin();
 
@@ -72,54 +74,40 @@ void loop()
     Serial.println(Set2Val);
 
     // Display mode
-//    if (digitalRead(A0) == 0)
-//    {
-//        modeText = "Add";
-//    }
-//    else if (digitalRead(A1) == 0)
-//    {
-//        modeText = "Sub";
-//    }
-    if (digitalRead(A2) == 0)
+    if (digitalRead(A0) == 0)
+    {
+        modeText = "Add";
+    }
+    else if (digitalRead(A1) == 0)
+    {
+        modeText = "Sub";
+    }
+    else if (digitalRead(A2) == 0)
     {
         modeText = "Mul";
     }
-//    else if (digitalRead(A3) == 0)
-//    {
-//        modeText = "Div";
-//    }
-//    else{
-//        modeText = "ERROR";
-//    }
+    else if (digitalRead(A3) == 0)
+    {
+        modeText = "Div";
+    }
+    else{
+        modeText = "ERROR";
+    }
 
 
     // Math operation function (set1, set2)
-    Result = MathCalculate(Set1Val, Set2Val, modeText);
-    Serial.println("Result : " + String((int)Result));
+    MathCalculate(Set1Val, Set2Val, modeText, Result, DecimalResult);
+    Serial.print("Result : ");
+    Serial.println(Result);
+    Serial.print("Decimal Result : ");
+    Serial.println(DecimalResult);
 
     // Print math result and mode
     Serial.println("Mode : " + modeText);
 
-    
-    /* TBD
-
-    // Set up negative pins
-    if (Result < 0)
-    {
-        digitalWrite(4, HIGH);
-    }
-
-    if (Result == NULL)
-    {
-        Serial.println("ERROR");
-        delay(2000);
-        return;
-    }
-
     // Output setup function
-    IntegerOutputCalculate(Result);
-    DecimalOutputCalculate(Result);
-    */
+    OutputCalculate(Result);
+
     Serial.println("**************************");
 
     // delay for 2 secs and repeat

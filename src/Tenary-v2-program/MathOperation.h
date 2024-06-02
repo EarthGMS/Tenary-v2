@@ -3,6 +3,6 @@
 
 #include "Arduino.h"
 
-extern uint8_t MathCalculate(uint8_t set1, uint8_t set2, String ChooseMode);
+extern void MathCalculate(uint8_t set1, uint8_t set2, String ChooseMode, uint8_t &Result, double &DecimalResult);
 
 #endif
