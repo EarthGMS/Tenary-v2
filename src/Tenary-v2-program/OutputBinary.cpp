@@ -2,74 +2,94 @@
 #include "OutputBinary.h"
 #include "math.h"
 
-uint8_t decimalVal;
+double decimalVal;
+String ResultInt;
 
-void OutputCalculate(double CalResult)
+void OutputCalculate(double CalResult, double DecimalResult)
 {
+    ResultInt = "0000000000000000";
+    decimalVal = DecimalResult - CalResult;
+    Serial.print("Decimal Result : ");
+    Serial.println(decimalVal);
+    
     round(CalResult);
-    //decimalVal = CalResult;
-    //decimalVal += 0.5;
-    //round(decimalVal);
-    Serial.print("Desired Result : ");
-    Serial.println(9);
-    Serial.print("Actual Result : ");
-    uint16_t BinaryResult = build16BitValue(CalResult/*, decimalVal*/);
-    Serial.println(BinaryResult);
+    Serial.print("Binary Result : ");
+    uint16_t BinaryResult = build16BitValue(CalResult, decimalVal);
+    Serial.println(ResultInt);
+    Serial.print("DECIMAL BINARY : ");
+    for (int i = 0; i < 8; i++){
+      Serial.print(ResultInt[i]);
+    }
+    Serial.println("");
+    Serial.print("INTEGER BINARY : ");
+    for (int j = 8; j < 16; j++){
+      Serial.print(ResultInt[j]);
+    }
+    Serial.println("");
+    shiftOut();
 }
 
-uint16_t build16BitValue(uint8_t intPart/*, double decPart*/)
+void build16BitValue(uint8_t intPart, double decPart)
 {
-    uint16_t returnValue = buildBitsForInt(intPart);
-    //returnValue |= buildBitsForDecimal(decPart); NOT NOW, ONLY INTEGERS FIRST
-    return returnValue;
+    buildBitsForDecimal();
+    buildBitsForInt(intPart);
 }
-uint16_t buildBitsForInt(uint8_t CalculateNum)
+void buildBitsForInt(uint8_t CalculateNum)
 {
-    uint16_t returnValue = 0;
-    uint8_t bitNumber = 2;
-    uint8_t currentReminder = 0;
-    for (int i = 0; i <= 5; i++)
+    uint8_t bitNumber = 7;
+    for (int i = 0; i < 6; i++)
     {
         if (CalculateNum % 2)
         {
-            bits_setBit(&returnValue, bitNumber);
-            CalculateNum /= 2;
+            ResultInt[i+8] = '1';
+            digitalWrite(5, HIGH);
         }
+        else{
+            ResultInt[i+8] = '0';
+            digitalWrite(5, LOW);
+        }
+        digitalWrite(6, HIGH); 
+        delay(5);  
+        digitalWrite(6, LOW);
+        CalculateNum /= 2;
         bitNumber++;
     }
-    currentReminder = CalculateNum % 2;
-    Serial.print("RE : ");
-    Serial.println(currentReminder);
-    returnValue |= currentReminder;
-    return returnValue;
-}
-/*
-uint16_t buildBitsForDecimal(double CalculateNum)
-{
-    uint16_t returnValue = 0;
-    uint8_t bitNumber = 10;
-    for (int i = 0; i <= 5; i++)
-    {
-        bool bitShouldBeSet;
-        if (bitShouldBeSet)
-            bits_setBit(&returnValue, bitNumber);
-        bitNumber++;
-    }
-    return returnValue;
-}
-*/
-void bits_setBit(uint16_t *bitsPtr, uint8_t bitNumber)
-{
-    if (bitNumber > 15)
-    {
-        Serial.println("ERROR!");
-        return;
-    }
-    *bitsPtr |= (1 << bitNumber);
 }
 
-void shiftOut(uint8_t CalculateNum, bool mode)
+void buildBitsForDecimal()
 {
+ 
+    for (int i = 0; i < 6; i++)
+    {
+        decimalVal*= 2;
+        if (decimalVal >= 1.00){
+          decimalVal-= 1;
+          ResultInt[i] = '1';
+          digitalWrite(5, HIGH);
+        }
+        else{
+          ResultInt[i] = '0';
+          digitalWrite(5, LOW);
+        }
+        digitalWrite(6, HIGH); 
+        delay(5);  
+        digitalWrite(6, LOW);
+    }
+}
 
+void shiftOut()
+{
+    for (int i = 0; i < 16; i++){
+      if (ResultInt[i] == '1'){
+        digitalWrite(5, HIGH);
+      }
+      else{
+        digitalWrite(5, LOW);
+      }
+      digitalWrite(6, HIGH); 
+      delay(5);  
+      digitalWrite(6, LOW);
+
+    }
 }
 

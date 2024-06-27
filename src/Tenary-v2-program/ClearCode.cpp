@@ -2,16 +2,16 @@
 
 void ResetPin()
 {
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 16; i++)
     {
-        digitalWrite(6, LOW);
-        digitalWrite(7, HIGH);
+        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH);
         delay(5);
-        digitalWrite(7, LOW);
+        digitalWrite(6, LOW);
     }
 
     delay(50);
-    digitalWrite(5, HIGH);
+    digitalWrite(4, HIGH);
     delay(50);
-    digitalWrite(5, LOW);
+    digitalWrite(4, LOW);
 }
