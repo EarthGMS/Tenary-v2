@@ -21,8 +21,8 @@ double DecimalResult;
 
 //Pins
 
-const int ERR_PIN = 2;
-const int NEG_PIN = 3;
+const int NEG_PIN = 2;
+const int ERR_PIN = 3;
 
 const int LCH_PIN = 4;
 const int DTA_PIN = 5;
@@ -76,7 +76,7 @@ void loop()
       DecimalResult = 0;
     // Turn off output pins
     ResetPin();
-
+    
     // Turn off LED indicator pin
     digitalWrite(ERR_PIN, LOW);
     digitalWrite(NEG_PIN, LOW);
@@ -109,20 +109,19 @@ void loop()
         modeText = "Div";
     }
     else{
-        modeText = "ERROR";
+        modeText = "ERROR (NO MODE SELECTED)";
     }
-
-
-    // Math operation function (set1, set2)
-    MathCalculate(Set1Val, Set2Val, modeText, Result, DecimalResult);
-    Serial.print("Result : ");
-    Serial.println(Result);
 
     // Print math result and mode
     Serial.println("Mode : " + modeText);
 
     // Output setup function
-    OutputCalculate(Result, DecimalResult);
+    if (modeText != "ERROR"){
+      Serial.print("Result : ");
+      // Math operation function (set1, set2)
+      MathCalculate(Set1Val, Set2Val, modeText, Result, DecimalResult);
+      OutputCalculate(Result, DecimalResult);
+    }
 
     delay(50);
     digitalWrite(LCH_PIN, HIGH); // Output pulse to RCLK (your REG_LCH)
@@ -131,7 +130,7 @@ void loop()
     delay(50);
 
     Serial.println("**************************");
-
+    
     // delay for 2 secs and repeat
     delay(2000);
 }

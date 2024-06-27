@@ -9,12 +9,10 @@ void OutputCalculate(double CalResult, double DecimalResult)
 {
     ResultInt = "0000000000000000";
     decimalVal = DecimalResult - CalResult;
-    Serial.print("Decimal Result : ");
-    Serial.println(decimalVal);
     
     round(CalResult);
     Serial.print("Binary Result : ");
-    uint16_t BinaryResult = build16BitValue(CalResult, decimalVal);
+    build16BitValue(CalResult, decimalVal);
     Serial.println(ResultInt);
     Serial.print("DECIMAL BINARY : ");
     for (int i = 0; i < 8; i++){
