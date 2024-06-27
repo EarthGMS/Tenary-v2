@@ -12,3 +12,5 @@ Made by : Pongsapat Boonpong & David Lowther
 Version : v2.0
 
 Finish date : 9 June 2024
+
+PDF -> https://drive.google.com/file/d/1ZRGUO1UHrLjdPFb8X-d4ybvAzpZOI7nw/view?usp=sharing
