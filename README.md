@@ -8,5 +8,7 @@ Tenary 2.0 is the project  about making 3 bit calculator for calculating and dis
 -Error and negative number indicator
 
 Made by : Pongsapat Boonpong & David Lowther
+
 Version : v2.0
+
 Finish date : 9 June 2024
