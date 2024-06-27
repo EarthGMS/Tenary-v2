@@ -36,6 +36,8 @@ const int SET2_1 = 10;
 const int SET2_2 = 11;
 const int SET2_3 = 12;
 
+int ModeCount;
+
 // Text
 String modeText;
 void setup()
@@ -74,6 +76,7 @@ void loop()
       Set2Val = 0;
       Result = 0;
       DecimalResult = 0;
+      ModeCount = 0;
     // Turn off output pins
     ResetPin();
     
@@ -90,6 +93,11 @@ void loop()
     Serial.println(Set1Val);
     Serial.print("Set 2 : ");
     Serial.println(Set2Val);
+
+    ModeCount += !digitalRead(A0);
+    ModeCount += !digitalRead(A1);
+    ModeCount += !digitalRead(A2);
+    ModeCount += !digitalRead(A3);
 
     // Display mode
     if (digitalRead(A0) == 0)
@@ -112,17 +120,23 @@ void loop()
         modeText = "ERROR (NO MODE SELECTED)";
     }
 
-    // Print math result and mode
-    Serial.println("Mode : " + modeText);
+    if(ModeCount > 1){
+      Serial.println("ERROR (MORE THAN 1 MODE IS SELECTED");
+    }
+    else{
+      // Print math result and mode
+      Serial.println("Mode : " + modeText); 
+    }
 
     // Output setup function
-    if (modeText != "ERROR"){
+    if (modeText != "ERROR" && ModeCount == 1){
       Serial.print("Result : ");
       // Math operation function (set1, set2)
       MathCalculate(Set1Val, Set2Val, modeText, Result, DecimalResult);
       OutputCalculate(Result, DecimalResult);
     }
 
+    //Shift result to 74HC595
     delay(50);
     digitalWrite(LCH_PIN, HIGH); // Output pulse to RCLK (your REG_LCH)
     delay(50);
